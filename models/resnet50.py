@@ -99,6 +99,18 @@ class ResNet50(nn.Module):
         return x
 
 
+    def calculate_accuracy(self, predicted, target):
+        '''Calculates the accuracy of the prediction.
+        '''
+
+        num_data = target.size()[0]
+        predicted = torch.argmax(predicted, dim=1)
+        correct_pred = torch.sum(predicted == target)
+
+        accuracy = correct_pred*(100/num_data)
+
+        return accuracy.item()
+
 
 # net = ResNet50()
 # x = torch.randn(1, 3, 224, 224)

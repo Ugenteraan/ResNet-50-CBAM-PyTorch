@@ -26,7 +26,7 @@ train_generator = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=
 test_generator = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
 
 model = ResNet50(image_depth=args.img_depth, num_classes=args.num_classes)
-optimizers = Adam(model.parameters(), lr=args.learning_rate)
+optimizer = Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
 model = model.to(device)
@@ -45,6 +45,49 @@ for epoch_idx in range(args.epoch):
 
     for i, sample in tqdm(enumerate(train_generator)):
 
-        print(sample['image'].size())
+        batch_x, batch_y = sample['image'].to(device), sample['label'].to(device)
+
+        optimizer.zero_grad()
+
+        net_output = model(batch_x)
+        total_loss = criterion(input=net_output, target=batch_y)
+
+        total_loss.backward()
+        optimizer.step()
+        batch_accuracy = model.calculate_accuracy(predicted=net_output, target=batch_y)
+        epoch_loss.append(total_loss.item())
+        epoch_accuracy.append(batch_accuracy)
+
+    curr_accuracy = sum(epoch_accuracy)/(i+1)
+    curr_loss = sum(epoch_loss)/(i+1)
+
+    print(f"Epoch {epoch_idx}")
+    print(f"Training Loss : {curr_loss}, Training accuracy : {curr_accuracy}")
+
+    model.eval()
+    epoch_loss = []
+    epoch_accuracy = []
+    i = 0
+
+    with torch.set_grad_enabled(False):
+        for i, sample in tqdm(enumerate(test_generator)):
+
+            batch_x, batch_y = sample['image'].to(device), sample['label'].to(device)
+
+            net_output = model(batch_x)
+
+            total_loss = criterion(input=net_output, target=batch_y)
+
+            batch_accuracy = model.calculate_accuracy(predicted=net_output, target=batch_y)
+            epoch_loss.append(total_loss.item())
+            epoch_accuracy.append(batch_accuracy)
+
+        curr_accuracy = sum(epoch_accuracy)/(i+1)
+        curr_loss = sum(epoch_loss)/(i+1)
+
+
+    print(f"Testing Loss : {curr_loss}, Testing accuracy : {curr_accuracy}")
+
+
 
 
