@@ -4,8 +4,7 @@ ResNet-50 Architecture.
 
 import torch
 import torch.nn as nn
-from torch.nn.modules.batchnorm import BatchNorm2d
-
+from .cbam import CBAM
 
 class BottleNeck(nn.Module):
     '''Bottleneck modules
@@ -16,7 +15,7 @@ class BottleNeck(nn.Module):
         '''
         super(BottleNeck, self).__init__()
 
-
+        self.use_cbam = use_cbam
         #only the first conv will be affected by the given stride parameter. The rest have default stride value (which is 1).
         self.conv1 = nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, bias=False, stride=stride)
         self.bn1 = nn.BatchNorm2d(num_features=out_channels)
@@ -35,15 +34,23 @@ class BottleNeck(nn.Module):
                 nn.BatchNorm2d(num_features=out_channels*expansion)
             )
 
+        if self.use_cbam:
+            self.cbam = CBAM(channel_in=out_channels*expansion)
+
+
     def forward(self, x):
         '''Forward Propagation.
         '''
+
         out = self.relu(self.bn1(self.conv1(x)))
         out = self.relu(self.bn2(self.conv2(out)))
         out = self.bn3(self.conv3(out))
+
+        if self.use_cbam:
+            out = self.cbam(out)
+
         out += self.identity_connection(x) #identity connection/skip connection
         out = self.relu(out)
-
 
         return out
 
@@ -111,9 +118,3 @@ class ResNet50(nn.Module):
         accuracy = correct_pred*(100/num_data)
 
         return accuracy.item()
-
-
-# net = ResNet50()
-# x = torch.randn(1, 3, 224, 224)
-# print(net(x).size())
-

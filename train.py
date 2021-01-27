@@ -25,7 +25,7 @@ test_dataset = LoadDataset(dataset_folder_path=args.data_folder,image_size=args.
 train_generator = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
 test_generator = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
 
-model = ResNet50(image_depth=args.img_depth, num_classes=args.num_classes)
+model = ResNet50(image_depth=args.img_depth, num_classes=args.num_classes, use_cbam=args.use_cbam)
 optimizer = Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
