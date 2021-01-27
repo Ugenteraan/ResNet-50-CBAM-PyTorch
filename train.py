@@ -36,7 +36,6 @@ summary(model, (3, 224, 224))
 best_accuracy = 0
 for epoch_idx in range(args.epoch):
     #Model Training & Validation.
-
     model.train()
 
     epoch_loss = []
@@ -87,7 +86,3 @@ for epoch_idx in range(args.epoch):
 
 
     print(f"Testing Loss : {curr_loss}, Testing accuracy : {curr_accuracy}")
-
-
-
-

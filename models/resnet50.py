@@ -11,7 +11,7 @@ class BottleNeck(nn.Module):
     '''Bottleneck modules
     '''
 
-    def __init__(self, in_channels, out_channels, expansion=4, stride=1):
+    def __init__(self, in_channels, out_channels, expansion=4, stride=1, use_cbam=True):
         '''Param init.
         '''
         super(BottleNeck, self).__init__()
@@ -44,6 +44,7 @@ class BottleNeck(nn.Module):
         out += self.identity_connection(x) #identity connection/skip connection
         out = self.relu(out)
 
+
         return out
 
 
@@ -51,7 +52,7 @@ class ResNet50(nn.Module):
     '''ResNet-50 Architecture.
     '''
 
-    def __init__(self, image_depth=3, num_classes=6):
+    def __init__(self, use_cbam=True, image_depth=3, num_classes=6):
         '''Params init and build arch.
         '''
         super(ResNet50, self).__init__()
@@ -64,21 +65,21 @@ class ResNet50(nn.Module):
                                             nn.BatchNorm2d(self.in_channels),
                                             nn.MaxPool2d(stride=2, kernel_size=3))
 
-        self.layer1 = self.make_layer(out_channels=64, num_blocks=self.num_blocks[0], stride=1)
-        self.layer2 = self.make_layer(out_channels=128, num_blocks=self.num_blocks[1], stride=2)
-        self.layer3 = self.make_layer(out_channels=256, num_blocks=self.num_blocks[2], stride=2)
-        self.layer4 = self.make_layer(out_channels=512, num_blocks=self.num_blocks[3], stride=2)
+        self.layer1 = self.make_layer(out_channels=64, num_blocks=self.num_blocks[0], stride=1, use_cbam=use_cbam)
+        self.layer2 = self.make_layer(out_channels=128, num_blocks=self.num_blocks[1], stride=2, use_cbam=use_cbam)
+        self.layer3 = self.make_layer(out_channels=256, num_blocks=self.num_blocks[2], stride=2, use_cbam=use_cbam)
+        self.layer4 = self.make_layer(out_channels=512, num_blocks=self.num_blocks[3], stride=2, use_cbam=use_cbam)
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.linear = nn.Linear(512*self.expansion, num_classes)
 
 
-    def make_layer(self, out_channels, num_blocks, stride):
+    def make_layer(self, out_channels, num_blocks, stride, use_cbam):
         '''To construct the bottleneck layers.
         '''
         strides = [stride] + [1]*(num_blocks-1)
         layers = []
         for stride in strides:
-            layers.append(BottleNeck(in_channels=self.in_channels, out_channels=out_channels, stride=stride, expansion=self.expansion))
+            layers.append(BottleNeck(in_channels=self.in_channels, out_channels=out_channels, stride=stride, expansion=self.expansion, use_cbam=use_cbam))
             self.in_channels = out_channels * self.expansion
         return nn.Sequential(*layers)
 
