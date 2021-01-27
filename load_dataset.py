@@ -15,7 +15,7 @@ class LoadDataset(Dataset):
     '''Loads the dataset from the given path.
     '''
 
-    def __init__(self, dataset_folder_path, image_size=226, image_depth=3, train=True, transform=None):
+    def __init__(self, dataset_folder_path, image_size=224, image_depth=3, train=True, transform=None):
         '''Parameter Init.
         '''
 

@@ -2,6 +2,7 @@
 '''
 
 
+import os
 from tqdm import tqdm
 import torch
 from torch.utils.data import DataLoader
@@ -12,14 +13,17 @@ from torchvision import transforms
 from models.resnet50 import ResNet50
 from runtime_args import args
 from load_dataset import LoadDataset
+from plot import plot_loss_acc
 
 
 device = torch.device("cuda:0" if torch.cuda.is_available() and args.device == 'gpu' else 'cpu')
 
 
+if not os.path.exists(args.graphs_folder) : os.mkdir(args.graphs_folder)
+
 train_dataset = LoadDataset(dataset_folder_path=args.data_folder, image_size=args.img_size, image_depth=args.img_depth, train=True,
                             transform=transforms.ToTensor())
-test_dataset = LoadDataset(dataset_folder_path=args.data_folder,image_size=args.img_size, image_depth=args.img_depth, train=False,
+test_dataset = LoadDataset(dataset_folder_path=args.data_folder, image_size=args.img_size, image_depth=args.img_depth, train=False,
                             transform=transforms.ToTensor())
 
 train_generator = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
@@ -32,6 +36,11 @@ criterion = torch.nn.CrossEntropyLoss()
 model = model.to(device)
 summary(model, (3, 224, 224))
 
+
+training_loss_list = []
+training_acc_list = []
+testing_loss_list = []
+testing_acc_list = []
 
 best_accuracy = 0
 for epoch_idx in range(args.epoch):
@@ -60,6 +69,9 @@ for epoch_idx in range(args.epoch):
     curr_accuracy = sum(epoch_accuracy)/(i+1)
     curr_loss = sum(epoch_loss)/(i+1)
 
+    training_loss_list.append(curr_accuracy)
+    training_acc_list.append(curr_loss)
+
     print(f"Epoch {epoch_idx}")
     print(f"Training Loss : {curr_loss}, Training accuracy : {curr_accuracy}")
 
@@ -84,5 +96,11 @@ for epoch_idx in range(args.epoch):
         curr_accuracy = sum(epoch_accuracy)/(i+1)
         curr_loss = sum(epoch_loss)/(i+1)
 
+        testing_loss_list.append(curr_accuracy)
+        testing_acc_list.append(curr_loss)
+
+    if epoch_idx % 5 == 0:
+        plot_loss_acc(path=args.graphs_folder, num_epoch=epoch_idx, train_accuracies=training_acc_list, train_losses=training_loss_list,
+                          test_accuracies=testing_acc_list, test_losses=testing_loss_list)
 
     print(f"Testing Loss : {curr_loss}, Testing accuracy : {curr_accuracy}")
