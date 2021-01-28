@@ -6,7 +6,7 @@ import os
 from tqdm import tqdm
 import torch
 from torch.utils.data import DataLoader
-from torch.optim import Adam
+from torch.optim import Adam, lr_scheduler
 from torchsummary import summary
 from torchvision import transforms
 
@@ -17,7 +17,6 @@ from plot import plot_loss_acc
 
 
 device = torch.device("cuda:0" if torch.cuda.is_available() and args.device == 'gpu' else 'cpu')
-
 
 if not os.path.exists(args.graphs_folder) : os.mkdir(args.graphs_folder)
 
@@ -31,6 +30,7 @@ test_generator = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=Tr
 
 model = ResNet50(image_depth=args.img_depth, num_classes=args.num_classes, use_cbam=args.use_cbam)
 optimizer = Adam(model.parameters(), lr=args.learning_rate)
+lr_decay = lr_scheduler.ExponentialLR(optimizer, gamma=args.decay_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
 model = model.to(device)
@@ -102,5 +102,7 @@ for epoch_idx in range(args.epoch):
     if epoch_idx % 5 == 0:
         plot_loss_acc(path=args.graphs_folder, num_epoch=epoch_idx, train_accuracies=training_acc_list, train_losses=training_loss_list,
                           test_accuracies=testing_acc_list, test_losses=testing_loss_list)
+
+        lr_decay.step() #decrease the learning rate at every n epoch.
 
     print(f"Testing Loss : {curr_loss}, Testing accuracy : {curr_accuracy}")
