@@ -106,3 +106,4 @@ for epoch_idx in range(args.epoch):
         lr_decay.step() #decrease the learning rate at every n epoch.
 
     print(f"Testing Loss : {curr_loss}, Testing accuracy : {curr_accuracy}")
+    print('--------------------------------------------------------------------------------')
