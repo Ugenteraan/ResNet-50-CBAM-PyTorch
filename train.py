@@ -19,6 +19,9 @@ from plot import plot_loss_acc
 device = torch.device("cuda:0" if torch.cuda.is_available() and args.device == 'gpu' else 'cpu')
 
 if not os.path.exists(args.graphs_folder) : os.mkdir(args.graphs_folder)
+model_save_folder = 'resnet_cbam/' if args.use_cbam else 'resnet/'
+
+if not os.path.exists(model_save_folder) : os.mkdir(model_save_folder)
 
 train_dataset = LoadDataset(dataset_folder_path=args.data_folder, image_size=args.img_size, image_depth=args.img_depth, train=True,
                             transform=transforms.ToTensor())
@@ -69,8 +72,8 @@ for epoch_idx in range(args.epoch):
     curr_accuracy = sum(epoch_accuracy)/(i+1)
     curr_loss = sum(epoch_loss)/(i+1)
 
-    training_loss_list.append(curr_accuracy)
-    training_acc_list.append(curr_loss)
+    training_loss_list.append(curr_loss)
+    training_acc_list.append(curr_accuracy)
 
     print(f"Epoch {epoch_idx}")
     print(f"Training Loss : {curr_loss}, Training accuracy : {curr_accuracy}")
@@ -96,14 +99,26 @@ for epoch_idx in range(args.epoch):
         curr_accuracy = sum(epoch_accuracy)/(i+1)
         curr_loss = sum(epoch_loss)/(i+1)
 
-        testing_loss_list.append(curr_accuracy)
-        testing_acc_list.append(curr_loss)
+        testing_loss_list.append(curr_loss)
+        testing_acc_list.append(curr_accuracy)
+
+    print(f"Testing Loss : {curr_loss}, Testing accuracy : {curr_accuracy}")
 
     if epoch_idx % 5 == 0:
         plot_loss_acc(path=args.graphs_folder, num_epoch=epoch_idx, train_accuracies=training_acc_list, train_losses=training_loss_list,
                           test_accuracies=testing_acc_list, test_losses=testing_loss_list)
 
         lr_decay.step() #decrease the learning rate at every n epoch.
+        curr_lr = 0
+        for params in optimizer.param_groups:
+            curr_lr = params['lr']
+        print(f"The current learning rate for training is : {curr_lr}")
 
-    print(f"Testing Loss : {curr_loss}, Testing accuracy : {curr_accuracy}")
-    print('--------------------------------------------------------------------------------')
+
+    if best_accuracy < curr_accuracy:
+        torch.save(model.state_dict(), f"{model_save_folder}model.pth")
+        best_accuracy = curr_accuracy
+        print('Model is saved!')
+
+
+    print('\n--------------------------------------------------------------------------------\n')
