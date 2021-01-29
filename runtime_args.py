@@ -17,6 +17,9 @@ parser.add_argument('--decay_rate', type=float, help='Specify the decay rate to 
 parser.add_argument('--num_workers', type=int, help='Specify the number of workers to be used to load the data.', default=4)
 parser.add_argument('--shuffle', type=bool, help='Specify if the data for training/testing should be shuffled or not.', default=True)
 parser.add_argument('--img_size', type=int, help='Specify the size of the input image.', default=224)
+parser.add_argument('--gpus', type=int, help='Specify the number of GPU in a node.', default=1)
+parser.add_argument('--nodes', type=int, help='Specify the number of nodes in total.', default=1)
+parser.add_argument('--rank', type=int, help='Specify the rank of the node.', default=0)
 parser.add_argument('--img_depth', type=int, help='Specify the depth of the input image.', default=3)
 parser.add_argument('--device', type=str, help='Specify which device to be used for the evaluation. Either "cpu" or "gpu".', default='gpu')
 
