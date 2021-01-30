@@ -51,7 +51,7 @@ output_folder = './output_resnet_cbam' if args.use_cbam else './output_resnet'
 if not os.path.exists(output_folder) : os.mkdir(output_folder)
 
 
-fig = plt.figure(figsize=(20, 4))
+fig = plt.figure(figsize=(10, 4))
 
 for i, image in tqdm(enumerate(data_generator)):
 
