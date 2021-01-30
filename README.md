@@ -3,6 +3,31 @@
 ### Introduction
 This repository contains the implementation of ResNet-50 with and without CBAM. Note that some parameters of the architecture may vary such as the kernel size or strides of convolutional layers. The implementation was tested on Intel's Image Classification dataset that can be found [here](https://www.kaggle.com/puneet6060/intel-image-classification). 
 
+### How to Use
+ In order to train your own custom dataset with this implementation, place your dataset folder at the root directory. Make sure that your dataset is split into two subfolder. `train` and `test` where the former contains your training dataset and the latter contains your validation set. Refer to the folder named `intel_dataset` in the repo as an example.
+ 
+ If you wish to train the model without CBAM, you can do so with
+ ```
+ python train.py --data_folder [YOUR DATASET FOLDER NAME] --gpus [NUMBER OF GPU]
+ ```
+ To train the model with CBAM, run
+  ```
+ python train.py --data_folder [YOUR DATASET FOLDER NAME] --gpus [NUMBER OF GPU] --use_cbam
+ ```
+ 
+ There are more arguments that can be supplied to the command. Run 
+ ```
+ python train.py -h
+ ```
+ for more information.
+ 
+ If you wish to visualize the final layer of feature maps produced by the **trained** model, create a folder in the root directory and simply place your images inside it and run
+ ```
+ python visualize.py --data_folder [FOLDER NAME] 
+ ```
+ Additionally, if the model is trained on CBAM architecture, then add `--use_cbam` at the end of the above command.
+
+
 ### Performance
 ResNet-50 **with** CBAM achieved an accuracy of **86.6%** on the validation set while ResNet-50 **without** CBAM achieved an accuracy of **84.34%** on the same validation set. The figures below show the improvement of the models over the epochs.
 
@@ -31,5 +56,31 @@ ResNet-50 **with** CBAM achieved an accuracy of **86.6%** on the validation set 
   <img src="readme_images/cbam_results/loss.png" >
   <div align="center"><figcaption>Loss over 30 epochs</figcaption></div>
 </figure>
+
+### Visualization
+ The figures below are the feature maps of the final convolutional layer of both ResNet-50 without CBAM and ResNet-50 with CBAM.
+ 
+ <div align="center"> 
+<b>ResNet-50 With CBAM</b>
+</div>
+ <figure class="image">
+  <img src="readme_images/cbam_viz/0.png" >
+</figure>
+ <figure class="image">
+  <img src="readme_images/cbam_viz/1.png" >
+</figure>
+ 
+ <b>ResNet-50 Without CBAM</b>
+</div>
+ <figure class="image">
+  <img src="readme_images/no_cbam_viz/0.png" >
+</figure>
+ <figure class="image">
+  <img src="readme_images/no_cbam_viz/1.png" >
+</figure>
+
+
+ 
+
 
 
