@@ -66,7 +66,7 @@ class ResNet50(nn.Module):
 
         self.in_channels = 64
         self.expansion = 4
-        self.num_blocks = [3, 3, 3, 2]
+        self.num_blocks = [3, 4, 6, 3]
 
         self.conv_block1 = nn.Sequential(nn.Conv2d(kernel_size=7, stride=2, in_channels=image_depth, out_channels=self.in_channels, padding=3, bias=False),
                                             nn.BatchNorm2d(self.in_channels),
