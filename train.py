@@ -85,7 +85,7 @@ def train(gpu, args):
 
             optimizer.zero_grad()
 
-            net_output = model(batch_x)
+            _,net_output = model(batch_x)
             total_loss = criterion(input=net_output, target=batch_y)
 
             total_loss.backward()
@@ -113,7 +113,7 @@ def train(gpu, args):
 
                 batch_x, batch_y = sample['image'].cuda(non_blocking=True), sample['label'].cuda(non_blocking=True)
 
-                net_output = model(batch_x)
+                _,net_output = model(batch_x)
 
                 total_loss = criterion(input=net_output, target=batch_y)
 

@@ -100,10 +100,10 @@ class ResNet50(nn.Module):
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
-        x = self.layer4(x)
-        x = self.avgpool(x)
+        x_conv = self.layer4(x)
+        x = self.avgpool(x_conv)
         x = nn.Flatten()(x) #flatten the feature maps.
         x = self.linear(x)
 
-        return x
+        return x_conv, x
 
