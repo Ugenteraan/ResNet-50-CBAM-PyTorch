@@ -25,7 +25,7 @@ This repository contains the implementation of ResNet-50 with and without CBAM. 
  ```
  python visualize.py --data_folder [FOLDER NAME] 
  ```
- Additionally, if the model is trained on CBAM architecture, then add `--use_cbam` at the end of the above command.
+ Additionally, if the model was trained on CBAM architecture, then add `--use_cbam` at the end of the command above.
 
 
 ## Performance
