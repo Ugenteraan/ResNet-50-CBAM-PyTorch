@@ -69,6 +69,9 @@ ResNet-50 **with** CBAM achieved an accuracy of **86.6%** on the validation set 
  <figure class="image">
   <img src="readme_images/cbam_viz/1.png" >
 </figure>
+ <figure class="image">
+  <img src="readme_images/cbam_viz/10.png" >
+</figure>
  
  <b>ResNet-50 Without CBAM</b>
 </div>
@@ -77,6 +80,9 @@ ResNet-50 **with** CBAM achieved an accuracy of **86.6%** on the validation set 
 </figure>
  <figure class="image">
   <img src="readme_images/no_cbam_viz/1.png" >
+</figure>
+ <figure class="image">
+  <img src="readme_images/no_cbam_viz/10.png" >
 </figure>
 
 
