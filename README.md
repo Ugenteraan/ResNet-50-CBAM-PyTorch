@@ -7,7 +7,7 @@ This repository contains the implementation of ResNet-50 with and without CBAM. 
 ResNet-50 **with** CBAM achieved an accuracy of **86.6%** on the validation set while ResNet-50 **without** CBAM achieved an accuracy of **84.34%** on the same validation set. The figures below show the improvement of the models over the epochs.
 
 <div align="center"> 
-**ResNet-50 Without CBAM**
+<b>ResNet-50 Without CBAM</b>
 </div>
 <div align="center"> 
 Accuracy over 30 epochs
