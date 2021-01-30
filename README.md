@@ -13,11 +13,22 @@ ResNet-50 **with** CBAM achieved an accuracy of **86.6%** on the validation set 
   <img src="readme_images/no_cbam_results/accuracy.png" >
   <div align="center"><figcaption>Accuracy over 30 epochs</figcaption></div>
 </figure>
-<div align="center"> 
-Loss over 30 epochs
-</div>
+
 <figure class="image">
   <img src="readme_images/no_cbam_results/loss.png" >
+  <div align="center"><figcaption>Loss over 30 epochs</figcaption></div>
+</figure>
+
+<div align="center"> 
+<b>ResNet-50 with CBAM</b>
+</div>
+<figure class="image">
+  <img src="readme_images/cbam_results/accuracy.png" >
+  <div align="center"><figcaption>Accuracy over 30 epochs</figcaption></div>
+</figure>
+
+<figure class="image">
+  <img src="readme_images/cbam_results/loss.png" >
   <div align="center"><figcaption>Loss over 30 epochs</figcaption></div>
 </figure>
 
