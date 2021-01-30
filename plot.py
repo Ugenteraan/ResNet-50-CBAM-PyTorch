@@ -24,7 +24,7 @@ def plot_loss_acc(path, num_epoch, train_accuracies, train_losses, test_accuraci
 
     sns.lineplot(data=data, x='Epochs', y='Accuracy', hue='Mode')
     plt.title('Accuracy Graph')
-    plt.savefig(path+f'accuracy_epoch_{num_epoch}.png')
+    plt.savefig(path+f'accuracy_epoch.png')
 
     plt.clf()
 
@@ -36,7 +36,7 @@ def plot_loss_acc(path, num_epoch, train_accuracies, train_losses, test_accuraci
     sns.lineplot(data=data, x='Epochs', y='Loss', hue='Mode')
     plt.title('Loss Graph')
 
-    plt.savefig(path+f'loss_epoch_{num_epoch}.png')
+    plt.savefig(path+f'loss_epoch.png')
 
     return None
 

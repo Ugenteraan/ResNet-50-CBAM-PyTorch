@@ -66,17 +66,18 @@ class ResNet50(nn.Module):
 
         self.in_channels = 64
         self.expansion = 4
-        self.num_blocks = [3, 4, 6, 3]
+        self.num_blocks = [3, 3, 3, 2]
 
-        self.conv_block1 = nn.Sequential(nn.Conv2d(kernel_size=3, stride=2, in_channels=image_depth, out_channels=self.in_channels, padding=1, bias=False),
+        self.conv_block1 = nn.Sequential(nn.Conv2d(kernel_size=7, stride=2, in_channels=image_depth, out_channels=self.in_channels, padding=3, bias=False),
                                             nn.BatchNorm2d(self.in_channels),
-                                            nn.MaxPool2d(stride=2, kernel_size=2))
+                                            nn.ReLU(inplace=True),
+                                            nn.MaxPool2d(stride=2, kernel_size=3, padding=1))
 
         self.layer1 = self.make_layer(out_channels=64, num_blocks=self.num_blocks[0], stride=1, use_cbam=use_cbam)
         self.layer2 = self.make_layer(out_channels=128, num_blocks=self.num_blocks[1], stride=2, use_cbam=use_cbam)
         self.layer3 = self.make_layer(out_channels=256, num_blocks=self.num_blocks[2], stride=2, use_cbam=use_cbam)
         self.layer4 = self.make_layer(out_channels=512, num_blocks=self.num_blocks[3], stride=2, use_cbam=use_cbam)
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self.avgpool = nn.AvgPool2d(7)
         self.linear = nn.Linear(512*self.expansion, num_classes)
 
 

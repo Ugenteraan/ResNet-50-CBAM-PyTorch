@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--data_folder', type=str, help='Specify the path to the folder where the data is.', required=True)
 parser.add_argument('--graphs_folder', type=str, help='Specify the path to the folder where the graphs should be written to.', default='./graphs/')
-parser.add_argument('--use_cbam', type=bool, help='Specify whether CBAM module should be used or not.', default=True)
+parser.add_argument('--use_cbam', help='Use this flag in order to make use of CBAM.', action='store_true')
 parser.add_argument('--model', type=str, help='Specify the model to train. Either resnet-50 or resnet-50-cbam.', default='resnet-50')
 parser.add_argument('--epoch', type=int, help='Specify the number of epochs for the training.', default=50)
 parser.add_argument('--batch_size', type=int, help='Specify the batch size to be used during training/testing.', default=10)

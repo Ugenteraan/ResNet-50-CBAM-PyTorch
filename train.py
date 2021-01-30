@@ -29,11 +29,8 @@ if not os.path.exists(model_save_folder) : os.mkdir(model_save_folder)
 
 
 
-
-
-
 def train(gpu, args):
-    '''Model Training and Validation.
+    '''Init models and dataloaders and train/validate model.
     '''
 
     rank = args.rank * args.gpus + gpu
@@ -60,16 +57,12 @@ def train(gpu, args):
                                 transform=transforms.ToTensor())
 
     train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset, num_replicas=world_size, rank=rank)
-    test_sampler = torch.utils.data.distributed.DistributedSampler(test_dataset, num_replicas=world_size, rank=rank)
+    # test_sampler = torch.utils.data.distributed.DistributedSampler(test_dataset, num_replicas=world_size, rank=rank)
 
     train_generator = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False,
                                     num_workers=args.num_workers, pin_memory=True, sampler=train_sampler)
     test_generator = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers,
-                                    pin_memory=True, sampler=test_sampler)
-
-
-
-
+                                    pin_memory=True)
 
 
     training_loss_list = []
@@ -136,9 +129,11 @@ def train(gpu, args):
 
         print(f"Testing Loss : {curr_loss}, Testing accuracy : {curr_accuracy}")
 
-        if epoch_idx % 5 == 0:
-            plot_loss_acc(path=args.graphs_folder, num_epoch=epoch_idx, train_accuracies=training_acc_list, train_losses=training_loss_list,
+        #plot accuracy and loss graph
+        plot_loss_acc(path=args.graphs_folder, num_epoch=epoch_idx, train_accuracies=training_acc_list, train_losses=training_loss_list,
                             test_accuracies=testing_acc_list, test_losses=testing_loss_list)
+
+        if epoch_idx % 5 == 0:
 
             lr_decay.step() #decrease the learning rate at every n epoch.
             curr_lr = 0
@@ -162,11 +157,3 @@ os.environ['MASTER_PORT'] = '8888'
 if __name__ == '__main__':
     mp.spawn(train, nprocs=args.gpus, args=(args,))
 
-
-# params = {
-#     'epoch_range': args.epoch,
-#     'rank' : args.num_rank,
-#     'gpus': args.gpus,
-#     'nodes':args.nodes,
-#     'world_size': args.nodes * args.gpus,
-# }
