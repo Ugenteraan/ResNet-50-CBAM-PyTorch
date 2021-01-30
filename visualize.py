@@ -78,13 +78,13 @@ for i, image in tqdm(enumerate(data_generator)):
     #create heatmap by overlaying the filters on the original image
     heatmap_cnn = cv2.addWeighted(np.asarray(input_img, dtype=np.float32), 0.9, heatmap, 0.0025, 0)
 
-    fig.add_subplot(151)
+    fig.add_subplot(131)
     plt.imshow(input_img)
     plt.title("Input Image")
     plt.xticks(())
     plt.yticks(())
 
-    fig.add_subplot(152)
+    fig.add_subplot(132)
     plt.imshow(cnn_combined_filter)
     if args.use_cbam:
         plt.title("CNN Feature Map with CBAM")
@@ -94,7 +94,7 @@ for i, image in tqdm(enumerate(data_generator)):
     plt.xticks(())
     plt.yticks(())
 
-    fig.add_subplot(153)
+    fig.add_subplot(133)
     plt.imshow(heatmap_cnn)
     plt.title("Heat Map")
     plt.xticks(())
