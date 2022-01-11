@@ -4,7 +4,6 @@
 This repository contains the implementation of ResNet-50 with and without CBAM. Note that some parameters of the architecture may vary such as the kernel size or strides of convolutional layers. The implementation was tested on Intel's Image Classification dataset that can be found [here](https://www.kaggle.com/puneet6060/intel-image-classification). 
 
 ### Pretrained Weights
-
 The trained models' weights are provided [here](https://drive.google.com/drive/folders/1Bp6FkNEcxdUNt4M6K43F6v0dEEwL-64a?usp=sharing). 
 
 ## How to Use
