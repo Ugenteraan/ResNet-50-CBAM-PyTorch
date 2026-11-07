@@ -27,7 +27,7 @@ model = model.to(device)
 assert os.path.exists(f"{model_save_folder}model.pth"), 'A trained model does not exist!'
 
 try:
-    state_dict = torch.load(f"{model_save_folder}model.pth", map_location=device)
+    state_dict = torch.load(f"{model_save_folder}model.pth", map_location=device, weights_only=True)
     new_state_dict = OrderedDict()
 
     for k,v in state_dict.items():
